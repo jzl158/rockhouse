@@ -39,27 +39,20 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: "https://yjhismyabucftxodwyxg.supabase.co/storage/v1/object/public/media/admin/2025-08-17/rockhouse-icon.png?v=5",
+        url: "/rockhouse-icon.png",
         type: "image/png",
         sizes: "32x32",
       },
       {
-        url: "https://yjhismyabucftxodwyxg.supabase.co/storage/v1/object/public/media/admin/2025-08-17/rockhouse-icon.png?v=5",
+        url: "/rockhouse-icon.png",
         type: "image/png",
         sizes: "16x16",
       },
     ],
     apple: [
       {
-        url: "https://yjhismyabucftxodwyxg.supabase.co/storage/v1/object/public/media/admin/2025-08-17/rockhouse-icon.png?v=5",
+        url: "/rockhouse-icon.png",
         sizes: "180x180",
-      },
-    ],
-    other: [
-      {
-        rel: "mask-icon",
-        url: "https://yjhismyabucftxodwyxg.supabase.co/storage/v1/object/public/media/admin/2025-08-17/safari-pinned-tab.svg?v=5",
-        color: "#111827",
       },
     ],
   },

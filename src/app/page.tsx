@@ -41,7 +41,7 @@ type CarouselItem = {
 };
 
 const BUCKET = "media";
-const DEFAULT_BG_URL = "https://yjhismyabucftxodwyxg.supabase.co/storage/v1/object/public/media/admin/2025-08-17/5e0d555f-8ffa-4e74-9d59-043641b93ba7.jpg";
+const DEFAULT_BG_URL = "/landscape1.jpg";
 
 const categoryColors: Record<string, string> = {
   landscaping: "#3B8D6D",

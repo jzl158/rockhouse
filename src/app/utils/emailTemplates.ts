@@ -17,7 +17,7 @@ export interface WelcomeEmailData {
 
 export function generateWelcomeEmailHtml(data: WelcomeEmailData): string {
   const companyName = data.companyName || 'Sauvage Outdoors';
-  const loginUrl = data.loginUrl || 'https://your-domain.com/login';
+  const loginUrl = data.loginUrl || `${process.env.NEXT_PUBLIC_SITE_URL ?? ''}/login`;
 
   return `
     <!DOCTYPE html>
@@ -83,7 +83,7 @@ export function generateWelcomeEmailHtml(data: WelcomeEmailData): string {
 
 export function generateWelcomeEmailText(data: WelcomeEmailData): string {
   const companyName = data.companyName || 'Sauvage Outdoors';
-  const loginUrl = data.loginUrl || 'https://your-domain.com/login';
+  const loginUrl = data.loginUrl || `${process.env.NEXT_PUBLIC_SITE_URL ?? ''}/login`;
 
   return `
 Welcome to ${companyName}!

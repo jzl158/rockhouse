@@ -4,6 +4,9 @@ The site is handed over as is. This file replaces `FINAL_SHIP.md`, which dates f
 September 2025 and is out of date. For what the admin dashboard does page by page, see
 `USER_GUIDE.md`.
 
+To stand the site up on your own Supabase and Vercel accounts without anything from
+the previous developer, follow `SETUP.md`.
+
 ## This site is not production or launch ready
 
 The client never provided the material the site needs to go live. Everything below is
@@ -40,11 +43,11 @@ Supabase is the whole backend. Whoever owns it is responsible for:
 
 - **Keeping it awake.** It is on Supabase's free plan, which pauses a project after about a week with no activity. A paused project takes the live site's logins, quotes, and gallery down until someone clicks Restore in the dashboard. It was paused and restored on 2026-10-18. The Pro plan does not pause.
 - **Backups.** The free plan has no downloadable backups. Take your own with `pg_dump` (version 17+, through the session pooler connection string, since the direct connection is IPv6 only), and download the `media` bucket.
-- **User logins** (Authentication → Users): reset passwords, remove staff who leave. For testing the admin side, log in at `/login` with `ashley-admin@rockhouse.test` / `Rockhouse-40f4a95f!`, then go to `/admin`. Change this password once the site is in real use.
+- **User logins** (Authentication → Users): reset passwords, remove staff who leave. The original test admin login has been removed from this file because the repo is public. Create your own admin user in your Supabase project (see `SETUP.md`).
 - **Storage** (Storage → `media`): gallery and customer quote photos.
 - **Keys** (Project Settings → API): the anon and service role keys live in Vercel's environment variables. If ownership changes, rotate the service role key and update Vercel.
 - **Auth email**: signup confirmations and password resets go out through Supabase's built-in sender, which is heavily rate limited. Production needs custom SMTP (Authentication → Emails) from the client's email workspace.
-- **Schema changes**: there are no migration files for most tables. Change the schema in the Supabase dashboard or SQL editor, and save any SQL you run in `src/sql/`.
+- **Schema changes**: `src/sql/schema.sql` recreates the full schema on a fresh project. Change the schema in the Supabase dashboard or SQL editor, and save any SQL you run in `src/sql/` so it stays reproducible.
 
 ## Stack
 
@@ -78,7 +81,7 @@ Maps, Analytics) and no Firebase are used.
 | Stripe / PayPal | Listed as payment methods in the admin | Not integrated, labels only |
 | Unsplash | Three homepage images hotlinked | Placeholder |
 | Domain `rockhouseatl.com` | Was the site's domain | Expired, see Domain below |
-| Old Supabase project `yjhismyabucftxodwyxg` | Original project | Gone. Still hardcoded in places, see Known issues |
+| Old Supabase project `yjhismyabucftxodwyxg` | Original project | Gone. All hardcoded references were removed on 2026-10-23; the app now reads Supabase settings only from environment variables |
 
 The client's Instagram marketing (Manychat keywords, A2P texting, contact reactivation)
 runs through LeadConnector outside this codebase.
@@ -90,7 +93,10 @@ Set in Vercel and in `.env.local` for local dev (not in git):
 - `NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `SUPABASE_SERVICE_ROLE_KEY`
+- `NEXT_PUBLIC_SITE_URL` (public URL of the deployed site, used in email links)
 - `RESEND_API_KEY` (not set anywhere yet)
+
+A template is in `.env.example`.
 
 ## Database state
 
@@ -104,9 +110,9 @@ admins and the record's own customer; `expenses`, `tax_records`, `inventory_item
 `inventory_transactions` are admin only. See `src/sql/tighten_read_policies.sql`
 (applied 2026-10-18).
 
-Tables the code writes to that **do not exist**: `contact_messages` (general contact
-form questions), `job_photos`, `job_notes`. The storage bucket `job-photos` (employee
-job photos) also does not exist.
+Tables the code writes to that did not exist in the original database (`contact_messages`,
+`job_photos`, `job_notes`) and the `job-photos` storage bucket are all created by
+`src/sql/schema.sql`, which reconstructs the whole schema for a fresh project. See `SETUP.md`.
 
 ## Known issues
 
@@ -119,11 +125,11 @@ job photos) also does not exist.
 
 ### Broken references
 
-- The favicon, homepage background, and About page images point to the old Supabase project (`src/app/layout.tsx`, `src/app/page.tsx`, `src/app/about/page.tsx`), which no longer resolves. The icon and both images exist in the new project's `media` bucket at the same paths; `safari-pinned-tab.svg` does not.
-- `next.config.ts` only allows images from the old Supabase host.
-- `src/lib/supabase/client.ts` falls back to the old Supabase URL.
+Fixed 2026-10-23: the favicon, homepage background and About page images now come from `public/`; `next.config.ts` accepts images from any Supabase project; `src/lib/supabase/client.ts` has no fallback URL and fails loudly if env vars are missing; email templates build their login link from `NEXT_PUBLIC_SITE_URL`.
+
+Still open:
+
 - The Instagram feed calls `/api/instagram`, which does not exist.
-- Email templates fall back to `https://your-domain.com/login`.
 
 ### Roles are inconsistent
 
@@ -150,7 +156,6 @@ at Vercel.
 
 - Real content from the client: photos, reviews, prices, services and categories
 - Fix the security items above
-- Point the hardcoded old-Supabase URLs at the new project
 - Set up an email provider and Stripe once the client creates the accounts
 - Register a domain and connect it in Vercel
 - Remove the `/supabase-test` page

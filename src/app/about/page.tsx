@@ -24,7 +24,7 @@ export default function AboutPage() {
                     <section className="grid grid-cols-1 lg:grid-cols-2 min-h-[500px]">
                         <div className="relative bg-white flex items-center justify-center p-8">
                             <img 
-                                src="https://yjhismyabucftxodwyxg.supabase.co/storage/v1/object/public/media/admin/2025-08-17/rockhouse-icon.png"
+                                src="/rockhouse-icon.png"
                                 alt="Rockhouse Icon"
                                 className="max-w-[200px] h-auto object-contain"
                             />
@@ -55,7 +55,7 @@ export default function AboutPage() {
                             </div>
                         </div>
                         <div className="relative bg-cover bg-center bg-no-repeat" style={{
-                            backgroundImage: "url(https://yjhismyabucftxodwyxg.supabase.co/storage/v1/object/public/media/admin/2025-08-17/d179a9e8-151e-4474-b3ad-812d2e44fc12.jpg)"
+                            backgroundImage: "url(/construction3.jpg)"
                         }}>
                             <div className="absolute inset-0 bg-black/30"></div>
                         </div>

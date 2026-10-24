@@ -3,7 +3,14 @@
 import { createBrowserClient } from "@supabase/ssr";
 import type { Database } from "@/types/database.types";
 
-export const supabase = createBrowserClient<Database>(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://yjhismyabucftxodwyxg.supabase.co',
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlqaGlzbXlhYnVjZnR4b2R3eXhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAyNTM2MDAsImV4cCI6MjA2NTgyOTYwMH0.AgIkZ2o1BrnZSnVFRTAOmO6mcVHjHmfO3Bc7dnTWxf4'
-);
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error(
+    "Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY. " +
+      "Copy .env.example to .env.local and fill in your Supabase project values."
+  );
+}
+
+export const supabase = createBrowserClient<Database>(supabaseUrl, supabaseAnonKey);
